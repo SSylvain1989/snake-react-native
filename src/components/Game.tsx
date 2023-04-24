@@ -7,12 +7,13 @@ import Snake from "./Snake";
 import { checkGameOver } from "../utils/checkGameOver";
 import Food from "./Food";
 import { checkEatsFood } from "../utils/checkEeatsFood";
+import { randomFoodPosition } from "../utils/randomFoodPosition";
 
 const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
 const FOOD_INITIAL_POSITION = { x: 5, y: 20 };
-const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 71 };
-const MOVE_INTERVAL = 50;
-const SCORE_INCREMENT = 10;
+const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 79 };
+const MOVE_INTERVAL = 150;
+const SCORE_INCREMENT = 1;
 
 export default function Game(): JSX.Element {
 	const [direction, setDirection] = useState<Direction>(Direction.Right);
@@ -20,6 +21,9 @@ export default function Game(): JSX.Element {
 	const [food, setFood] = useState<Coordinate>(FOOD_INITIAL_POSITION);
 	const [isGameOver, setIsGameOver] = useState<boolean>(false);
 	const [isPaused, setIsPaused] = useState<boolean>(false);
+	const [score, setScore] = useState<number>(0);
+
+	console.log("food", food)
 
 	useEffect(() => {
 		if (!isGameOver) {
@@ -36,55 +40,50 @@ export default function Game(): JSX.Element {
 
 		// game over
 		if (checkGameOver(snakeHead, GAME_BOUNDS)) {
-			setIsGameOver((prev) => !prev); // we doing this to not wait the recreation of the component 
+			setIsGameOver((prev) => !prev); // we doing this to not wait the recreation of the component
 			return; // return here prevent to go much down in the code execution
 		}
-			switch (direction) {
-				case Direction.Up:
-					newHead.y -= 1;
-					break;
-				case Direction.Down:
-					newHead.y += 1;
-					break;
-				case Direction.Left:
-					newHead.x -= 1;
-					break;
-				case Direction.Right:
-					newHead.x += 1;
-					break;
-				default:
-					break;
-			}
+		switch (direction) {
+			case Direction.Up:
+				newHead.y -= 1;
+				break;
+			case Direction.Down:
+				newHead.y += 1;
+				break;
+			case Direction.Left:
+				newHead.x -= 1;
+				break;
+			case Direction.Right:
+				newHead.x += 1;
+				break;
+			default:
+				break;
+		}
 		// if eat food
 		// grow snake
-		if (checkEatsFood(newHead, food, 2)) {
-			setSnake([newHead, ...snake])
+		if (checkEatsFood(newHead, food, 1)) {
+			setFood(randomFoodPosition(GAME_BOUNDS.xMax, GAME_BOUNDS.yMax));
+			setSnake([newHead, ...snake]);
+			setScore(score + SCORE_INCREMENT);
+		} else {
+			setSnake([newHead, ...snake.slice(0, -1)]);
 		}
-		setSnake([newHead, ...snake.slice(0, -1)]);
 	};
-	console.log("x", snake[0].x);
-	console.log("y", snake[0].y);
-	console.log(isGameOver);
 	const handleGesture = (event: GestureEventType) => {
 		const { translationX, translationY } = event.nativeEvent;
 		if (Math.abs(translationX) > Math.abs(translationY)) {
 			if (translationX > 0) {
-				// moving right 👉
 				setDirection(Direction.Right);
 			} else {
-				// moving left 👈
 				setDirection(Direction.Left);
 			}
 		} else {
 			if (translationY > 0) {
-				// moving down 👇
 				setDirection(Direction.Down);
 			} else {
-				// moving up 👆
 				setDirection(Direction.Up);
 			}
 		}
-		console.log("translationX:", translationX, "translationY", translationY);
 	};
 
 	return (

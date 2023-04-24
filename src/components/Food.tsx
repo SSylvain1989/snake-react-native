@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Coordinate } from "../types/types";
 
 function getRandomFoodEmoji() {
-	const foodEmojis = ["🐇", "🧚", "🦝"];
+	const foodEmojis = ["🐇", "🧚", "🦝", "🍣"];
 	const randomIndex = Math.floor(Math.random() * foodEmojis.length);
 	return foodEmojis[randomIndex];
 }
@@ -13,8 +13,8 @@ export default function Food({ x, y }: Coordinate): JSX.Element {
 
 const styles = StyleSheet.create({
 	food: {
-		width: 20,
-		height: 20,
+		width: 18,
+		height: 18,
 		borderRadius: 7,
 		position: "absolute",
 	},
