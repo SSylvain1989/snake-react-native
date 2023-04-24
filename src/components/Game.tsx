@@ -5,10 +5,12 @@ import { Colors } from "../styles/colors";
 import { Coordinate, Direction, GestureEventType } from "../types/types";
 import Snake from "./Snake";
 import { checkGameOver } from "../utils/checkGameOver";
+import Food from "./Food";
+import { checkEatsFood } from "../utils/checkEeatsFood";
 
 const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
 const FOOD_INITIAL_POSITION = { x: 5, y: 20 };
-const GAME_BOUNDS = { xMin: 0, xMax: 35, yMin: 0, yMax: 63 };
+const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 71 };
 const MOVE_INTERVAL = 50;
 const SCORE_INCREMENT = 10;
 
@@ -55,6 +57,9 @@ export default function Game(): JSX.Element {
 			}
 		// if eat food
 		// grow snake
+		if (checkEatsFood(newHead, food, 2)) {
+			setSnake([newHead, ...snake])
+		}
 		setSnake([newHead, ...snake.slice(0, -1)]);
 	};
 	console.log("x", snake[0].x);
@@ -87,6 +92,7 @@ export default function Game(): JSX.Element {
 			<SafeAreaView style={styles.container}>
 				<View style={styles.boundaries}>
 					<Snake snake={snake} />
+					<Food x={food.x} y={food.y} />
 				</View>
 			</SafeAreaView>
 		</PanGestureHandler>
