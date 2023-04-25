@@ -23,9 +23,9 @@ export default function Snake({ snake }: SnakeProps): JSX.Element {
 
 const styles = StyleSheet.create({
 	snake: {
-		width: 15,
-		height: 15,
-		borderRadius: 5,
+		width: 18,
+		height: 18,
+		borderRadius: 15,
 		backgroundColor: Colors.primary,
 		position: "absolute",
 	},
