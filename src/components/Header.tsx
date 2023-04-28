@@ -1,6 +1,8 @@
 import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { Colors } from "../styles/colors";
+import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native";
 
 interface HeaderProps {
 	reloadGame: () => void;
@@ -15,8 +17,12 @@ export default function Header({
 	pauseGame,
 	isPaused,
 }: HeaderProps) {
+	const { goBack } = useNavigation();
 	return (
 		<View style={styles.container}>
+			<TouchableOpacity>
+				<Button title="🏠" onPress={() => goBack()} />
+			</TouchableOpacity>
 			<TouchableOpacity onPress={reloadGame}>
 				<Ionicons name="reload-circle" size={35} color={Colors.primary} />
 			</TouchableOpacity>

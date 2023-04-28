@@ -9,6 +9,8 @@ import Food from "./Food";
 import { checkEatsFood } from "../utils/checkEeatsFood";
 import { randomFoodPosition } from "../utils/randomFoodPosition";
 import Header from "./Header";
+import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native";
 
 const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
 const FOOD_INITIAL_POSITION = { x: 5, y: 20 };
@@ -16,7 +18,8 @@ const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 79 };
 const MOVE_INTERVAL = 150;
 const SCORE_INCREMENT = 1;
 
-export default function Game(): JSX.Element {
+export default function Game( niveau : number): JSX.Element {
+	console.log(niveau)
 	const [direction, setDirection] = useState<Direction>(Direction.Right);
 	const [snake, setSnake] = useState<Coordinate[]>(SNAKE_INITIAL_POSITION);
 	const [food, setFood] = useState<Coordinate>(FOOD_INITIAL_POSITION);
@@ -102,7 +105,7 @@ export default function Game(): JSX.Element {
 		<PanGestureHandler onGestureEvent={handleGesture}>
 			<SafeAreaView style={styles.container}>
 				<Header reloadGame={reloadGame} pauseGame={pauseGame} isPaused={isPaused}>
-					<Text style={styles.titleText}>score: {score}</Text>
+						<Text style={styles.titleText}>score: {score}</Text>
 				</Header>
 
 				<View style={styles.boundaries}>
