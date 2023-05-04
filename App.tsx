@@ -7,7 +7,7 @@ import HomeScreen from "./src/pages/home";
 import About from "./src/pages/about";
 import Game from "./src/components/Game";
 
-const Stack = createNativeStackNavigator();''
+const Stack = createNativeStackNavigator();
 
 function App() {
 	return (
@@ -25,6 +25,7 @@ function App() {
 					{(props) => <HomeScreen {...props} />}
 				</Stack.Screen>
 				<Stack.Screen name="Details" component={About} />
+				{/* <Stack.Screen name="Details" component={Game} /> */}
 				<Stack.Screen
 					name="Game"
 					component={Game}

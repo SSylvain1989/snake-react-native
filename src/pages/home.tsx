@@ -2,21 +2,21 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 function HomeScreen({ navigation }: any) {
 	const handleLevelPress = (level: number) => {
-		navigation.navigate("Game", { niveau: level });
+		console.log('dans homme',level)
+		navigation.navigate("Game", { level: level });
 	};
 	const goTo = () => navigation.navigate("Details");
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Snake 🐍</Text>
-			<Text style={styles.subtitle}>Menu</Text>
-			<TouchableOpacity onPress={() => handleLevelPress(1)} style={styles.button}>
+			<TouchableOpacity onPress={() => handleLevelPress(0)} style={styles.button}>
 				<Text style={styles.buttonText}>Beginner</Text>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => handleLevelPress(2)} style={styles.button}>
+			<TouchableOpacity onPress={() => handleLevelPress(50)} style={styles.button}>
 				<Text style={styles.buttonText}>Confirmed</Text>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => handleLevelPress(3)} style={styles.button}>
+			<TouchableOpacity onPress={() => handleLevelPress(70)} style={styles.button}>
 				<Text style={styles.buttonText}>Expert</Text>
 			</TouchableOpacity>
 			<TouchableOpacity onPress={goTo} style={styles.button}>

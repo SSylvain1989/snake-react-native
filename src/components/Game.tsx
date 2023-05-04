@@ -9,24 +9,26 @@ import Food from "./Food";
 import { checkEatsFood } from "../utils/checkEeatsFood";
 import { randomFoodPosition } from "../utils/randomFoodPosition";
 import Header from "./Header";
-import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native";
+import Wall from "./Wall";
 
-const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
-const FOOD_INITIAL_POSITION = { x: 5, y: 20 };
-const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 79 };
-const MOVE_INTERVAL = 150;
-const SCORE_INCREMENT = 1;
-
-export default function Game( niveau : number): JSX.Element {
-	console.log(niveau)
+export default function Game({ route }: any) {
+	const difficulty = route.params?.level;
+	const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
+	const WALL_INITIAL_POSITION: Coordinate[] = [];
+	for (let i = 5; i <= 25; i++) {
+		WALL_INITIAL_POSITION.push({ x: i, y: 35 });
+	}
+	const FOOD_INITIAL_POSITION = { x: 5, y: 20 };
+	const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 79 };
+	const MOVE_INTERVAL = 150 - difficulty;
+	const SCORE_INCREMENT = 1;
 	const [direction, setDirection] = useState<Direction>(Direction.Right);
 	const [snake, setSnake] = useState<Coordinate[]>(SNAKE_INITIAL_POSITION);
 	const [food, setFood] = useState<Coordinate>(FOOD_INITIAL_POSITION);
 	const [isGameOver, setIsGameOver] = useState<boolean>(false);
 	const [isPaused, setIsPaused] = useState<boolean>(false);
 	const [score, setScore] = useState<number>(0);
-
+	console.log('***', isGameOver)
 	useEffect(() => {
 		if (!isGameOver) {
 			const intervalId = setInterval(() => {
@@ -41,7 +43,7 @@ export default function Game( niveau : number): JSX.Element {
 		const newHead = { ...snakeHead }; // create copy, we will move the new one, not move the real head
 
 		// game over
-		if (checkGameOver(snakeHead, GAME_BOUNDS)) {
+		if (checkGameOver(snakeHead, GAME_BOUNDS, WALL_INITIAL_POSITION)) {
 			setIsGameOver((prev) => !prev); // we doing this to not wait the recreation of the component
 			return; // return here prevent to go much down in the code execution
 		}
@@ -105,12 +107,15 @@ export default function Game( niveau : number): JSX.Element {
 		<PanGestureHandler onGestureEvent={handleGesture}>
 			<SafeAreaView style={styles.container}>
 				<Header reloadGame={reloadGame} pauseGame={pauseGame} isPaused={isPaused}>
-						<Text style={styles.titleText}>score: {score}</Text>
+					<Text style={styles.titleText}>score: {score}</Text>
 				</Header>
 
 				<View style={styles.boundaries}>
 					<Snake snake={snake} />
 					<Food x={food.x} y={food.y} />
+					{WALL_INITIAL_POSITION.map((position, index) => (
+						<Wall key={index} wall={[position]} />
+					))}
 				</View>
 			</SafeAreaView>
 		</PanGestureHandler>
@@ -121,6 +126,12 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colors.primary,
+	},
+	wall: {
+		position: "absolute",
+		backgroundColor: "black",
+		width: 12,
+		height: 11,
 	},
 	titleText: {
 		fontSize: 20,
