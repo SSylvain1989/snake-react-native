@@ -3,9 +3,14 @@ import { Coordinate, GameBounds } from "../types/types";
 export const checkGameOver = (
 	snakeHead: Coordinate,
 	boundaries: GameBounds,
-	wall: Coordinate[]
+	wall: Coordinate[],
+	wallBis: Coordinate[]
 ): boolean => {
+	// TODO : function to not repeat myself here
 	const isTouchingWall = wall.some((wallPiece) => {
+		return wallPiece.x === snakeHead.x && wallPiece.y === snakeHead.y;
+	});
+	const isTouchingWallBis = wallBis.some((wallPiece) => {
 		return wallPiece.x === snakeHead.x && wallPiece.y === snakeHead.y;
 	});
 	return (
@@ -13,6 +18,7 @@ export const checkGameOver = (
 		snakeHead.x < boundaries.xMin ||
 		snakeHead.y > boundaries.yMax ||
 		snakeHead.y < boundaries.yMin ||
-		isTouchingWall
+		isTouchingWall ||
+		isTouchingWallBis
 	);
 };

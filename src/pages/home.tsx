@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 function HomeScreen({ navigation }: any) {
 	const handleLevelPress = (level: number) => {
-		console.log('dans homme',level)
 		navigation.navigate("Game", { level: level });
 	};
 	const goTo = () => navigation.navigate("Details");
