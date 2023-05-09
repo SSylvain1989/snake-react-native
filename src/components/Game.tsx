@@ -9,14 +9,23 @@ import Food from "./Food";
 import { checkEatsFood } from "../utils/checkEeatsFood";
 import { randomFoodPosition } from "../utils/randomFoodPosition";
 import Header from "./Header";
+import Wall from "./Wall";
 
-const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
-const FOOD_INITIAL_POSITION = { x: 5, y: 20 };
-const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 79 };
-const MOVE_INTERVAL = 150;
-const SCORE_INCREMENT = 1;
-
-export default function Game(): JSX.Element {
+export default function Game({ route }: any) {
+	const difficulty = route.params?.level;
+	const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
+	const WALL_POSITION: Coordinate[] = [];
+	for (let i = 5; i <= 25; i++) {
+		WALL_POSITION.push({ x: i, y: 30 });
+	}
+	const WALL_BIS_POSITION: Coordinate[] = [];
+	for (let i = 10; i <= 35; i++) {
+		WALL_BIS_POSITION.push({ x: i, y: 45 });
+	}
+	const FOOD_INITIAL_POSITION = { x: 5, y: 20 };
+	const GAME_BOUNDS = { xMin: 0, xMax: 37, yMin: 0, yMax: 79 };
+	const MOVE_INTERVAL = 150 - difficulty;
+	const SCORE_INCREMENT = 1;
 	const [direction, setDirection] = useState<Direction>(Direction.Right);
 	const [snake, setSnake] = useState<Coordinate[]>(SNAKE_INITIAL_POSITION);
 	const [food, setFood] = useState<Coordinate>(FOOD_INITIAL_POSITION);
@@ -38,7 +47,7 @@ export default function Game(): JSX.Element {
 		const newHead = { ...snakeHead }; // create copy, we will move the new one, not move the real head
 
 		// game over
-		if (checkGameOver(snakeHead, GAME_BOUNDS)) {
+		if (checkGameOver(snakeHead, GAME_BOUNDS, WALL_POSITION, WALL_BIS_POSITION)) {
 			setIsGameOver((prev) => !prev); // we doing this to not wait the recreation of the component
 			return; // return here prevent to go much down in the code execution
 		}
@@ -108,6 +117,12 @@ export default function Game(): JSX.Element {
 				<View style={styles.boundaries}>
 					<Snake snake={snake} />
 					<Food x={food.x} y={food.y} />
+					{WALL_POSITION.map((position, index) => (
+						<Wall key={index} wall={[position]} />
+					))}
+					{WALL_BIS_POSITION.map((position, index) => (
+						<Wall key={index} wall={[position]} />
+					))}
 				</View>
 			</SafeAreaView>
 		</PanGestureHandler>
@@ -118,6 +133,12 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colors.primary,
+	},
+	wall: {
+		position: "absolute",
+		backgroundColor: "black",
+		width: 12,
+		height: 11,
 	},
 	titleText: {
 		fontSize: 20,
