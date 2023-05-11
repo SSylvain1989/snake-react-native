@@ -1,22 +1,26 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 function HomeScreen({ navigation }: any) {
-	const handleLevelPress = (level: number) => {
-		navigation.navigate("Game", { level: level });
+	const handleLevelPress = (level: number, wall: boolean
+	) => {
+		navigation.navigate("Game", { level: level, wall: wall });
 	};
 	const goTo = () => navigation.navigate("Details");
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Snake 🐍</Text>
-			<TouchableOpacity onPress={() => handleLevelPress(0)} style={styles.button}>
+			<TouchableOpacity onPress={() => handleLevelPress(0, false)} style={styles.button}>
 				<Text style={styles.buttonText}>Beginner</Text>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => handleLevelPress(50)} style={styles.button}>
+			<TouchableOpacity onPress={() => handleLevelPress(50, false)} style={styles.button}>
 				<Text style={styles.buttonText}>Confirmed</Text>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => handleLevelPress(70)} style={styles.button}>
+			<TouchableOpacity onPress={() => handleLevelPress(70, false)} style={styles.button}>
 				<Text style={styles.buttonText}>Expert</Text>
+			</TouchableOpacity>
+			<TouchableOpacity onPress={() => handleLevelPress(70, true)} style={styles.button}>
+				<Text style={styles.buttonText}>Expert with Walls</Text>
 			</TouchableOpacity>
 			<TouchableOpacity onPress={goTo} style={styles.button}>
 				<Text style={styles.buttonText}>Détails</Text>
